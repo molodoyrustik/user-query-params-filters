@@ -1,24 +1,45 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+import { QueryParamProvider } from 'use-query-params';
+import AboutPage from './AboutPage';
+import ListPage from './ListPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/list">List</Link>
+          </li>
+        </ul>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Switch>
+            <Route exact path="/">
+              Index
+             </Route>
+            <Route path="/about">
+              <AboutPage />
+            </Route>
+            <Route path="/list">
+              <ListPage />
+            </Route>
+          </Switch>
+        </QueryParamProvider>
+      </Router >
     </div>
   );
 }
