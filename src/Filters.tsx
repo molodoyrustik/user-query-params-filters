@@ -30,35 +30,28 @@ const user2: IUser = {
 const users: IUser[] = [user1, user2]
 
 const Filters = () => {
-    const MyParam = {
-        encode: (val: string) => {
-            return val;
-        },
-        decode: (input: string | (string | null)[] | null | undefined) => {
-            const a =  users.find((user) => user.id === input);
-            if (a) {
-             return a.id;
-            } else {
-                return undefined;
-            }
-        },
-    };
 
     const [query, setQuery] = useQueryParams({
-        filter1: MyParam,
+        filter1: withDefault(StringParam, 'id1'),
     });
 
-    console.log(query);
+    const [filter1, setFilter1] = useState<IUser | undefined>(users.find((user) => user.id === query.filter1));
+
+    useEffect(() => {
+        setQuery({
+            filter1: filter1?.id,
+        })
+    }, [filter1])
+
+    console.log('query', query);
+    console.log('filter', filter1);
     return <div>
         <h1>Filters</h1>
         <div>
             <p>1 filter</p>
-            <select value={query.filter1} onChange={(value) => {
-                // setFilter1(value.target.value)
-                console.log(value.target.value);
-                setQuery({
-                    filter1: value.target.value ? value.target.value: undefined,
-                })
+            <select value={filter1?.id} onChange={(event) => {
+                const id = event.target.value;
+                setFilter1(users.find((user) => user.id === id));
             }}>
                 {
                     users.map((user) => {
